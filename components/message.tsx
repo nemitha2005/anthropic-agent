@@ -5,6 +5,7 @@ import type { Vote } from "@/lib/db/schema";
 import type { ChatMessage } from "@/lib/types";
 import { cn, sanitizeText } from "@/lib/utils";
 import { useDataStream } from "./data-stream-provider";
+import type { ArtifactKind } from "./artifact";
 import { DocumentToolResult } from "./document";
 import { DocumentPreview } from "./document-preview";
 import { MessageContent } from "./elements/message";
@@ -22,6 +23,7 @@ import { MessageEditor } from "./message-editor";
 import { MessageReasoning } from "./message-reasoning";
 import { PreviewAttachment } from "./preview-attachment";
 import { Weather } from "./weather";
+import type { WeatherAtLocation } from "./weather";
 
 const PurePreviewMessage = ({
   addToolApprovalResponse,
@@ -181,7 +183,7 @@ const PurePreviewMessage = ({
               if (state === "output-available") {
                 return (
                   <div className={widthClass} key={toolCallId}>
-                    <Weather weatherAtLocation={part.output} />
+                    <Weather weatherAtLocation={part.output as WeatherAtLocation} />
                   </div>
                 );
               }
@@ -330,7 +332,7 @@ const PurePreviewMessage = ({
                           ) : (
                             <DocumentToolResult
                               isReadonly={isReadonly}
-                              result={part.output}
+                              result={part.output as unknown as { id: string; title: string; kind: ArtifactKind }}
                               type="request-suggestions"
                             />
                           )
