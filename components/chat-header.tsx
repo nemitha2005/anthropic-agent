@@ -38,7 +38,7 @@ function PureChatHeader({
   };
 
   return (
-    <header className="sticky top-0 flex items-center gap-2 bg-background px-2 py-1.5 md:px-2">
+    <header className="sticky top-0 flex items-center gap-2 bg-background px-4 py-3 md:px-6">
       <SidebarToggle />
 
       {(!open || windowWidth < 768) && (
