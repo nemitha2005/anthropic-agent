@@ -109,9 +109,11 @@ export function SidebarHistory() {
     isValidating,
     isLoading,
     mutate,
-  } = useSWRInfinite<ChatHistory>(getChatHistoryPaginationKey, fetcher, {
-    fallbackData: [],
-  });
+  } = useSWRInfinite<ChatHistory>(
+    user ? getChatHistoryPaginationKey : () => null,
+    fetcher,
+    { fallbackData: [] }
+  );
 
   const router = useRouter();
   const [deleteId, setDeleteId] = useState<string | null>(null);
