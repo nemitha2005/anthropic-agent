@@ -8,8 +8,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://chat.vercel.ai"),
-  title: "Next.js Chatbot Template",
-  description: "Next.js chatbot template using the AI SDK.",
+  title: "Anthropic Agent",
+  description: "A contextual RAG bot built with Next.js, Vercel AI SDK, and Firebase Authentication.",
 };
 
 export const viewport = {
@@ -64,6 +64,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link href="/logo.png" rel="icon" type="image/png" />
         <script
           // biome-ignore lint/security/noDangerouslySetInnerHtml: "Required"
           dangerouslySetInnerHTML={{

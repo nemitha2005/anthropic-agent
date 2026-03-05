@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useFirebaseAuth } from "@/lib/firebase/auth-context";
 
@@ -12,9 +13,24 @@ export const Greeting = () => {
 
   return (
     <div
-      className="mx-auto mt-4 flex size-full max-w-3xl flex-col justify-center px-4 md:mt-16 md:px-8"
+      className="mx-auto mt-4 flex size-full max-w-3xl flex-col items-start justify-center px-4 md:mt-16 md:px-8"
       key="overview"
     >
+      <motion.div
+        animate={{ opacity: 1, scale: 1 }}
+        className="mb-6"
+        exit={{ opacity: 0, scale: 0.95 }}
+        initial={{ opacity: 0, scale: 0.95 }}
+        transition={{ delay: 0.3 }}
+      >
+        <Image
+          alt="Anthropic Agent"
+          className="rounded-2xl"
+          height={64}
+          src="/logo.png"
+          width={64}
+        />
+      </motion.div>
       <motion.div
         animate={{ opacity: 1, y: 0 }}
         className="font-semibold text-xl md:text-2xl"

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -12,7 +13,7 @@ import {
   getChatHistoryPaginationKey,
   SidebarHistory,
 } from "@/components/sidebar-history";
-import { SidebarUserNav } from "@/components/sidebar-user-nav";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
   Sidebar,
@@ -66,14 +67,21 @@ export function AppSidebar() {
           <SidebarMenu>
             <div className="flex flex-row items-center justify-between">
               <Link
-                className="flex flex-row items-center gap-3"
+                className="flex flex-row items-center gap-2"
                 href="/"
                 onClick={() => {
                   setOpenMobile(false);
                 }}
               >
-                <span className="cursor-pointer rounded-md px-2 font-semibold text-lg hover:bg-muted">
-                  OpenChat
+                <Image
+                  alt="Anthropic Agent"
+                  className="rounded-lg"
+                  height={28}
+                  src="/logo.png"
+                  width={28}
+                />
+                <span className="cursor-pointer rounded-md px-1 font-semibold text-lg hover:bg-muted">
+                  Anthropic Agent
                 </span>
               </Link>
               <div className="flex flex-row gap-1">
@@ -120,7 +128,7 @@ export function AppSidebar() {
         <SidebarContent>
           <SidebarHistory />
         </SidebarContent>
-        <SidebarFooter>{user && <SidebarUserNav />}</SidebarFooter>
+        <SidebarFooter><ThemeToggle /></SidebarFooter>
       </Sidebar>
 
       <AlertDialog
