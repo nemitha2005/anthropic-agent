@@ -2,12 +2,13 @@ import { cookies } from "next/headers";
 import Script from "next/script";
 import { Suspense } from "react";
 import { AppSidebar } from "@/components/app-sidebar";
+import { AuthGuard } from "@/components/auth-guard";
 import { DataStreamProvider } from "@/components/data-stream-provider";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <>
+    <AuthGuard>
       <Script
         src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"
         strategy="beforeInteractive"
@@ -17,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <SidebarWrapper>{children}</SidebarWrapper>
         </Suspense>
       </DataStreamProvider>
-    </>
+    </AuthGuard>
   );
 }
 
@@ -27,7 +28,7 @@ async function SidebarWrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider defaultOpen={!isCollapsed}>
-      <AppSidebar user={undefined} />
+      <AppSidebar />
       <SidebarInset>{children}</SidebarInset>
     </SidebarProvider>
   );
