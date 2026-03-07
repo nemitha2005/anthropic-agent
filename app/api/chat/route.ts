@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  return result.toDataStreamResponse();
+  return result.toUIMessageStreamResponse();
 }
 
 export async function DELETE(request: NextRequest) {
