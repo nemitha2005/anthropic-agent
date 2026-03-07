@@ -1,4 +1,4 @@
-export const DEFAULT_CHAT_MODEL = "claude-sonnet-4-20250514";
+export const DEFAULT_CHAT_MODEL = "claude-haiku-4-5";
 
 export type ChatModel = {
   id: string;
@@ -8,33 +8,34 @@ export type ChatModel = {
 };
 
 export const chatModels: ChatModel[] = [
+  // ── Latest Claude 4 generation (GA) ─────────────────────────────────────
   {
-    id: "claude-3-5-haiku-20241022",
-    name: "Claude Haiku 3.5",
+    id: "claude-haiku-4-5",
+    name: "Claude Haiku 4.5",
     provider: "anthropic",
-    description: "Fast and affordable, great for everyday tasks",
+    description: "Fastest model with near-frontier intelligence · $1 / $5 MTok",
   },
   {
-    id: "claude-sonnet-4-20250514",
-    name: "Claude Sonnet 4",
+    id: "claude-sonnet-4-6",
+    name: "Claude Sonnet 4.6",
     provider: "anthropic",
-    description: "Best balance of speed, intelligence, and cost",
+    description: "Best balance of speed and intelligence · $3 / $15 MTok",
   },
   {
-    id: "claude-opus-4-5",
-    name: "Claude Opus 4.5",
+    id: "claude-opus-4-6",
+    name: "Claude Opus 4.6",
     provider: "anthropic",
-    description: "Most capable Anthropic model",
+    description: "Most intelligent — ideal for agents & coding · $5 / $25 MTok",
   },
+  // ── Extended thinking ────────────────────────────────────────────────────
   {
     id: "claude-3-7-sonnet-20250219",
     name: "Claude Sonnet 3.7",
     provider: "reasoning",
-    description: "Extended thinking for complex problems",
+    description: "Classic extended-thinking model",
   },
 ];
 
-// Group models by provider for UI
 export const modelsByProvider = chatModels.reduce(
   (acc, model) => {
     if (!acc[model.provider]) {
