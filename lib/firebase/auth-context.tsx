@@ -25,9 +25,15 @@ export function FirebaseAuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
       setLoading(false);
+      if (firebaseUser) {
+        const token = await firebaseUser.getIdToken();
+        document.cookie = `firebase-token=${token}; path=/; max-age=3600; SameSite=Strict`;
+      } else {
+        document.cookie = "firebase-token=; path=/; max-age=0";
+      }
     });
 
     return () => unsubscribe();
