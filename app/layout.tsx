@@ -66,6 +66,9 @@ export default function RootLayout({
       <head>
         <link href="/logo.png" rel="icon" type="image/png" />
         <script
+          src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"
+        />
+        <script
           // biome-ignore lint/security/noDangerouslySetInnerHtml: "Required"
           dangerouslySetInnerHTML={{
             __html: THEME_COLOR_SCRIPT,
