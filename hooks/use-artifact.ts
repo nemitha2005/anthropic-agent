@@ -21,10 +21,17 @@ export const initialArtifactData: UIArtifact = {
 
 type Selector<T> = (state: UIArtifact) => T;
 
+const SWR_OPTIONS = {
+  fallbackData: initialArtifactData,
+  revalidateOnMount: false,
+  revalidateOnFocus: false,
+  revalidateOnReconnect: false,
+  revalidateIfStale: false,
+  shouldRetryOnError: false,
+} as const;
+
 export function useArtifactSelector<Selected>(selector: Selector<Selected>) {
-  const { data: localArtifact } = useSWR<UIArtifact>("artifact", null, {
-    fallbackData: initialArtifactData,
-  });
+  const { data: localArtifact } = useSWR<UIArtifact>("artifact", null, SWR_OPTIONS);
 
   const selectedValue = useMemo(() => {
     if (!localArtifact) {
@@ -40,9 +47,7 @@ export function useArtifact() {
   const { data: localArtifact, mutate: setLocalArtifact } = useSWR<UIArtifact>(
     "artifact",
     null,
-    {
-      fallbackData: initialArtifactData,
-    }
+    SWR_OPTIONS
   );
 
   const artifact = useMemo(() => {
@@ -54,15 +59,16 @@ export function useArtifact() {
 
   const setArtifact = useCallback(
     (updaterFn: UIArtifact | ((currentArtifact: UIArtifact) => UIArtifact)) => {
-      setLocalArtifact((currentArtifact) => {
-        const artifactToUpdate = currentArtifact || initialArtifactData;
-
-        if (typeof updaterFn === "function") {
-          return updaterFn(artifactToUpdate);
-        }
-
-        return updaterFn;
-      });
+      setLocalArtifact(
+        (currentArtifact) => {
+          const artifactToUpdate = currentArtifact || initialArtifactData;
+          if (typeof updaterFn === "function") {
+            return updaterFn(artifactToUpdate);
+          }
+          return updaterFn;
+        },
+        { revalidate: false }
+      );
     },
     [setLocalArtifact]
   );
@@ -74,6 +80,10 @@ export function useArtifact() {
       null,
       {
         fallbackData: null,
+        revalidateOnMount: false,
+        revalidateOnFocus: false,
+        revalidateOnReconnect: false,
+        revalidateIfStale: false,
       }
     );
 
