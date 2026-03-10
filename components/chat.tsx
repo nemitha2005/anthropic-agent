@@ -17,13 +17,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useArtifact, useArtifactSelector } from "@/hooks/use-artifact";
 import { useAutoResume } from "@/hooks/use-auto-resume";
 import type { Vote } from "@/lib/db/schema";
 import { OpenChatError } from "@/lib/errors";
 import type { Attachment, ChatMessage } from "@/lib/types";
 import { fetcher, fetchWithErrorHandlers, generateUUID } from "@/lib/utils";
-import { Artifact } from "./artifact";
 import { useDataStream } from "./data-stream-provider";
 import { Messages } from "./messages";
 import { MultimodalInput } from "./multimodal-input";
@@ -47,18 +45,15 @@ export function Chat({
 
   const { mutate } = useSWRConfig();
 
-  // Handle browser back/forward navigation
   useEffect(() => {
     const handlePopState = () => {
-      // When user navigates back/forward, refresh to sync with URL
       router.refresh();
     };
-
     window.addEventListener("popstate", handlePopState);
     return () => window.removeEventListener("popstate", handlePopState);
   }, [router]);
-  const { setDataStream } = useDataStream();
 
+  const { setDataStream } = useDataStream();
   const [input, setInput] = useState<string>("");
   const [showCreditCardAlert, setShowCreditCardAlert] = useState(false);
   const [currentModelId, setCurrentModelId] = useState(initialChatModel);
@@ -166,40 +161,6 @@ export function Chat({
   );
 
   const [attachments, setAttachments] = useState<Attachment[]>([]);
-  const isArtifactVisible = useArtifactSelector((state) => state.isVisible);
-  const { artifact, setArtifact } = useArtifact();
-
-  useEffect(() => {
-    const stored = localStorage.getItem(`artifact-${id}`);
-    if (stored) {
-      try {
-        const { documentId, title, kind } = JSON.parse(stored);
-        setArtifact((current) => ({
-          ...current,
-          documentId,
-          title,
-          kind,
-          isVisible: true,
-          status: "idle",
-        }));
-      } catch {
-        localStorage.removeItem(`artifact-${id}`);
-      }
-    }
-  }, [id, setArtifact]);
-
-  useEffect(() => {
-    if (artifact.documentId !== "init" && artifact.status === "idle") {
-      localStorage.setItem(
-        `artifact-${id}`,
-        JSON.stringify({
-          documentId: artifact.documentId,
-          title: artifact.title,
-          kind: artifact.kind,
-        })
-      );
-    }
-  }, [artifact, id]);
 
   useAutoResume({
     autoResume,
@@ -219,7 +180,6 @@ export function Chat({
         <Messages
           addToolApprovalResponse={addToolApprovalResponse}
           chatId={id}
-          isArtifactVisible={isArtifactVisible}
           isReadonly={isReadonly}
           messages={messages}
           regenerate={regenerate}
@@ -248,24 +208,6 @@ export function Chat({
           )}
         </div>
       </div>
-
-      <Artifact
-        addToolApprovalResponse={addToolApprovalResponse}
-        attachments={attachments}
-        chatId={id}
-        input={input}
-        isReadonly={isReadonly}
-        messages={messages}
-        regenerate={regenerate}
-        selectedModelId={currentModelId}
-        sendMessage={sendMessage}
-        setAttachments={setAttachments}
-        setInput={setInput}
-        setMessages={setMessages}
-        status={status}
-        stop={stop}
-        votes={votes}
-      />
 
       <AlertDialog
         onOpenChange={setShowCreditCardAlert}
