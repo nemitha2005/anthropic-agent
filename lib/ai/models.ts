@@ -31,13 +31,6 @@ export const chatModels: ChatModel[] = [
     description: "Most intelligent — ideal for agents & coding · $5 / $25 MTok",
     supportsThinking: true,
   },
-  {
-    id: "claude-3-7-sonnet-20250219",
-    name: "Claude Sonnet 3.7",
-    provider: "reasoning",
-    description: "Classic extended-thinking model",
-    supportsThinking: true,
-  },
 ];
 
 export const modelsByProvider = chatModels.reduce(
