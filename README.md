@@ -10,7 +10,7 @@ A full-featured AI chat application built with Next.js and the Anthropic Claude 
 
 ## Features
 
-- **Multiple Claude models** — Claude Haiku 4.5, Sonnet 4.6, and Opus 4.6, plus Claude Sonnet 3.7 with extended thinking
+- **Multiple Claude models** — Claude Haiku 4.5, Sonnet 4.6, and Opus 4.6 all are with extended thinking
 - **Streaming responses** — Real-time token streaming powered by the Vercel AI SDK
 - **Artifact canvas** — Generate and edit code, documents, spreadsheets, and images inline
 - **Persistent chat history** — Conversations stored in Firestore, paginated and resumable
