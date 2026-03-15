@@ -1,4 +1,5 @@
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import { CodeEditor } from "@/components/code-editor";
 import {
   Console,
@@ -7,6 +8,7 @@ import {
 } from "@/components/console";
 import { Artifact } from "@/components/create-artifact";
 import {
+  CodeIcon,
   CopyIcon,
   LogsIcon,
   MessageIcon,
@@ -65,6 +67,7 @@ function detectRequiredHandlers(code: string): string[] {
 
 type Metadata = {
   outputs: ConsoleOutput[];
+  activeView: "code" | "output";
 };
 
 export const codeArtifact = new Artifact<"code", Metadata>({
@@ -74,6 +77,7 @@ export const codeArtifact = new Artifact<"code", Metadata>({
   initialize: ({ setMetadata }) => {
     setMetadata({
       outputs: [],
+      activeView: "code",
     });
   },
   onStreamPart: ({ streamPart, setArtifact }) => {
@@ -93,38 +97,72 @@ export const codeArtifact = new Artifact<"code", Metadata>({
     }
   },
   content: ({ metadata, setMetadata, ...props }) => {
+    const activeView = metadata?.activeView ?? "code";
     const isHtml =
       props.content.trimStart().startsWith("<") ||
       props.content.trimStart().toLowerCase().startsWith("<!doctype");
+    const hasHtmlOutput = isHtml && props.status === "idle";
+    const hasConsoleOutput = Boolean(metadata?.outputs?.length);
+
+    const setView = (view: "code" | "output") => {
+      setMetadata((currentMetadata) => ({
+        ...(currentMetadata ?? { outputs: [] }),
+        activeView: view,
+      }));
+    };
 
     return (
       <>
-        <div className="px-1">
-          <CodeEditor {...props} />
+        <div className="flex items-center justify-between border-b border-border px-3 py-2">
+          <div className="inline-flex items-center gap-1 rounded-md bg-muted p-1">
+            <Button
+              size="sm"
+              variant={activeView === "code" ? "secondary" : "ghost"}
+              onClick={() => setView("code")}
+              aria-pressed={activeView === "code"}
+            >
+              <CodeIcon size={16} />
+              Code
+            </Button>
+            <Button
+              size="sm"
+              variant={activeView === "output" ? "secondary" : "ghost"}
+              onClick={() => setView("output")}
+              aria-pressed={activeView === "output"}
+            >
+              <EyeIcon size={16} />
+              Output
+            </Button>
+          </div>
         </div>
 
-        {isHtml && props.status === "idle" && (
-          <div className="border-t border-border">
+        <div className="px-1">
+          {activeView === "code" ? (
+            <CodeEditor {...props} />
+          ) : hasHtmlOutput ? (
             <iframe
               sandbox="allow-scripts"
               srcDoc={props.content}
-              className="h-[300px] w-full bg-white"
+              className="h-[calc(80dvh)] w-full bg-white"
               title="HTML Preview"
             />
-          </div>
-        )}
+          ) : hasConsoleOutput ? (
+            <Console
+              consoleOutputs={metadata.outputs}
+              setConsoleOutputs={() => {
+                setMetadata((currentMetadata) => ({
+                  ...(currentMetadata ?? { activeView: "output" }),
+                  outputs: [],
+                }));
+              }}
+            />
+          ) : (
+            <div className="flex h-[300px] items-center justify-center rounded-md border border-dashed text-sm text-muted-foreground">
+              No output yet. Run the code or generate HTML to preview output.
+            </div>
+          )}
+        </div>
 
-        {metadata?.outputs && (
-          <Console
-            consoleOutputs={metadata.outputs}
-            setConsoleOutputs={() => {
-              setMetadata({
-                ...metadata,
-                outputs: [],
-              });
-            }}
-          />
-        )}
       </>
     );
   },
@@ -139,6 +177,7 @@ export const codeArtifact = new Artifact<"code", Metadata>({
 
         setMetadata((metadata) => ({
           ...metadata,
+          activeView: "output",
           outputs: [
             ...(metadata?.outputs ?? []),
             {
