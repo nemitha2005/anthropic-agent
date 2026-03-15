@@ -12,7 +12,10 @@ A full-featured AI chat application built with Next.js and the Anthropic Claude 
 
 - **Multiple Claude models** — Claude Haiku 4.5, Sonnet 4.6, and Opus 4.6, plus Claude Sonnet 3.7 with extended thinking
 - **Streaming responses** — Real-time token streaming powered by the Vercel AI SDK
-- **Artifact canvas** — Generate and edit code, documents, spreadsheets, and images inline
+- **Artifact canvas** — Generate and edit text, code, spreadsheets, and images inline
+- **Code artifact split view** — Toggle between **Code** and **Output** views in the same artifact panel
+- **Code execution + preview** — Run Python directly in-browser (Pyodide console output) and preview HTML output safely in a sandboxed iframe
+- **Artifact version navigation** — Move between previous/next artifact versions, with diff mode support for text artifacts
 - **Persistent chat history** — Conversations stored in Firestore, paginated and resumable
 - **Authentication** — Email/password and Google Sign-In via Firebase Auth (email verification enforced)
 - **Message voting** — Thumbs up/down feedback stored per message
